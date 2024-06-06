@@ -7,8 +7,8 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     const users = {
         christianspinola: 'Tequila9!',
         matheusandrade: '204060@Med',
-        laura: '123.med',
-        chay: '123.med',
+        lauraaguiar: '123@med',
+        chay: '123@med',
         admin: 'adminpass'
     };
     
