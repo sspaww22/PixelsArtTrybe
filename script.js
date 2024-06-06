@@ -6,7 +6,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     
     const users = {
         christianspinola: 'Tequila9!',
-        maheusandrade: '204060@Med',
+        matheusandrade: '204060@Med',
         laura: '123.med',
         chay: '123.med',
         admin: 'adminpass'
