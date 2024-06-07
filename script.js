@@ -9,6 +9,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         matheusandrade: '204060@Med',
         lauraaguiar: '123@med',
         chay: '123@med',
+        lohancaliari: '123@med',
         admin: 'adminpass'
     };
     
