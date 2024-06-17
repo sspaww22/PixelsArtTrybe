@@ -10,6 +10,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         lauraaguiar: '123@med',
         chay: '123@med',
         lohancaliari: '123@med',
+        juanmuzy: '123@med',
         admin: 'adminpass'
     };
     
