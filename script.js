@@ -8,7 +8,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
         christianspinola: 'Tequila9!',
         matheusandrade: '204060@Med',
         lauraaguiar: '123@med',
-        chay: '123@med',
+        charles: '123@med',
         lohancaliari: '123@med',
         juanmuzy: '123@med',
         admin: 'adminpass'
