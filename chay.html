@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CheckList Hospitalar</title>
     <style>
-        /* Reset CSS */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -16,13 +15,15 @@
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             color: #333;
+            padding: 20px;
         }
 
         header {
             background-color: #333;
             color: white;
-            padding: 20px 0;
+            padding: 10px;
             text-align: center;
+            margin-bottom: 20px;
         }
 
         h1 {
@@ -31,37 +32,42 @@
 
         main {
             padding: 20px;
+            margin-bottom: 20px;
+            page-break-inside: avoid;
         }
 
         .table {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
             gap: 20px;
-            justify-content: space-between;
+            page-break-inside: avoid;
         }
 
         .sala {
-            flex: 0 1 calc(48% - 20px); /* 2 salas por linha com margem */
             border: 2px solid #ccc;
             border-radius: 10px;
             padding: 20px;
             background-color: white;
-            transition: background-color 0.3s ease; /* Transição de cor suave */
+            transition: background-color 0.3s ease;
+            page-break-inside: avoid;
         }
 
         .sala h2 {
             font-size: 20px;
             margin-bottom: 10px;
+            page-break-inside: avoid;
         }
 
         .item {
             margin-bottom: 10px;
             display: flex;
             align-items: center;
+            page-break-inside: avoid;
         }
 
         .item label {
             margin-left: 5px;
+            page-break-inside: avoid;
         }
 
         .sala textarea {
@@ -71,13 +77,30 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             resize: vertical;
+            display: none;
+            page-break-inside: avoid;
+        }
+
+        .toggle-btn {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .toggle-btn:hover {
+            background-color: #555;
         }
 
         footer {
             background-color: #333;
             color: white;
-            padding: 20px 0;
+            padding: 10px;
             text-align: center;
+            margin-top: 20px;
         }
 
         #print-btn {
@@ -94,34 +117,62 @@
             background-color: #555;
         }
 
-        /* Estilo para impressão */
         @media print {
-            footer {
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                background-color: #333;
-                color: white;
-                padding: 20px 0;
-                text-align: center;
+            @page {
+                size: landscape;
+                margin: 20mm;
             }
+
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            header, footer {
+                margin: 0;
+                padding: 10px;
+            }
+
+            header {
+                margin-bottom: 10mm;
+                text-align: center;
+                page-break-after: avoid;
+            }
+
+            footer {
+                margin-top: 10mm;
+                text-align: center;
+                page-break-before: avoid;
+            }
+
+            main {
+                margin-top: 20mm;
+                margin-bottom: 20mm;
+                page-break-before: auto;
+                page-break-after: auto;
+            }
+
             #print-btn {
                 display: none;
             }
+
             .sala {
-                background-color: #e6ffe6 !important; /* Verde */
+                background-color: #e6ffe6 !important;
+                page-break-inside: avoid;
+                break-inside: avoid;
             }
+
             .sala:not(.sala-checked) {
-                background-color: #ffe6e6 !important; /* Vermelho */
+                background-color: #ffe6e6 !important;
             }
-            .sala:not(.sala-checked) textarea {
+
+            .sala textarea {
+                display: block;
+            }
+
+            .toggle-btn {
                 display: none;
             }
-            .sala {
-    /* Outras regras de estilo... */
-    page-break-inside: avoid;
-}
-
         }
     </style>
 </head>
@@ -130,554 +181,80 @@
         <h1>CheckList Hospitalar</h1>
     </header>
     <main id="main-content">
-        <div class="table">
-            <!-- Salas -->
-            <div class="sala">
-                <h2>Adm diagnóstico</h2>
-                <form>
-                    <div class="item">
-                        <input type="checkbox" id="adm-diagnostico-mouse" name="mouse">
-                        <label for="adm-diagnostico-mouse">Mouse</label>
-                    </div>
-                    <div class="item">
-                        <input type="checkbox" id="adm-diagnostico-teclado" name="teclado">
-                        <label for="adm-diagnostico-teclado">Teclado</label>
-                    </div>
-                    <div class="item">
-                        <input type="checkbox" id="adm-diagnostico-monitor" name="monitor">
-                        <label for="adm-diagnostico-monitor">Monitor</label>
-                    </div>
-                    <div class="item">
-                        <input type="checkbox" id="adm-diagnostico-impressora" name="impressora">
-                        <label for="adm-diagnostico-impressora">Impressora</label>
-                    </div>
-                    <textarea class="observacoes" placeholder="Observações"></textarea>
-                </form>
-            </div>
-            <!-- Adicione mais salas abaixo -->
-            <div class="sala">
-                <h2>Sala Multi</h2>
-                <form>
-                    <div class="item">
-                        <input type="checkbox" id="sala-multi-mouse" name="mouse">
-                        <label for="sala-multi-mouse">Mouse</label>
-                    </div>
-                    <div class="item">
-                        <input type="checkbox" id="sala-multi-teclado" name="teclado">
-                        <label for="sala-multi-teclado">Teclado</label>
-                    </div>
-                    <div class="item">
-                        <input type="checkbox" id="sala-multi-monitor" name="monitor">
-                        <label for="sala-multi-monitor">Monitor</label>
-                    </div>
-                    <div class="item">
-                        <input type="checkbox" id="sala-multi-impressora" name="impressora">
-                        <label for="sala-multi-impressora">Impressora</label>
-                    </div>
-                    <textarea class="observacoes" placeholder="Observações"></textarea>
-                </form>
-            </div>
-            <div class="sala">
-                <h2>Gerencia Médica</h2>
-                <form>
-                    <div class="item">
-                        <input type="checkbox" id="gerencia-medica-mouse" name="mouse">
-                        <label for="gerencia-medica-mouse">Mouse</label>
-                    </div>
-                    <div class="item">
-                        <input type="checkbox" id="gerencia-medica-teclado" name="teclado">
-                        <label for="gerencia-medica-teclado">Teclado</label>
-                    </div>
-                    <div class="item">
-                        <input type="checkbox" id="gerencia-medica-monitor" name="monitor">
-                        <label for="gerencia-medica-monitor">Monitor</label>
-                    </div>
-                    <div class="item">
-                        <input type="checkbox" id="gerencia-medica-impressora" name="impressora">
-                        <label for="gerencia-medica-impressora">Impressora</label>
-                    </div>
-                    <textarea class="observacoes" placeholder="Observações"></textarea>
-                </form>
-            </div>
-            <div class="sala">
-                <h2>Gerencia Ps</h2>
-                <form>
-                    <div class="item">
-                        <input type="checkbox" id="gerencia-medica-mouse" name="mouse">
-                        <label for="gerencia-medica-mouse">Mouse</label>
-                    </div>
-                    <div class="item">
-                        <input type="checkbox" id="gerencia-medica-teclado" name="teclado">
-                        <label for="gerencia-medica-teclado">Teclado</label>
-                    </div>
-                    <div class="item">
-                        <input type="checkbox" id="gerencia-medica-monitor" name="monitor">
-                        <label for="gerencia-medica-monitor">Monitor</label>
-                    </div>
-                    <div class="item">
-                        <input type="checkbox" id="gerencia-medica-impressora" name="impressora">
-                        <label for="gerencia-medica-impressora">Impressora</label>
-                    </div>
-                    <textarea class="observacoes" placeholder="Observações"></textarea>
-                </form>
-            </div>
- <div class="sala">
-    <h2>Laboratório</h2>
-    <form>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-mouse" name="mouse">
-            <label for="gerencia-medica-mouse">Mouse</label>
+        <div class="table" id="table">
+            <!-- Salas serão adicionadas aqui -->
         </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-teclado" name="teclado">
-            <label for="gerencia-medica-teclado">Teclado</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-monitor" name="monitor">
-            <label for="gerencia-medica-monitor">Monitor</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-impressora" name="impressora">
-            <label for="gerencia-medica-impressora">Impressora</label>
-        </div>
-        <textarea class="observacoes" placeholder="Observações"></textarea>
-    </form>
-</div>
-<div class="sala">
-    <h2>Recepção Medicação Nova</h2>
-    <form>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-mouse" name="mouse">
-            <label for="gerencia-medica-mouse">Mouse</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-teclado" name="teclado">
-            <label for="gerencia-medica-teclado">Teclado</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-monitor" name="monitor">
-            <label for="gerencia-medica-monitor">Monitor</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-impressora" name="impressora">
-            <label for="gerencia-medica-impressora">Impressora</label>
-        </div>
-        <textarea class="observacoes" placeholder="Observações"></textarea>
-    </form>
-</div>
-<div class="sala">
-    <h2>Sala Sultura</h2>
-    <form>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-mouse" name="mouse">
-            <label for="gerencia-medica-mouse">Mouse</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-teclado" name="teclado">
-            <label for="gerencia-medica-teclado">Teclado</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-monitor" name="monitor">
-            <label for="gerencia-medica-monitor">Monitor</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-impressora" name="impressora">
-            <label for="gerencia-medica-impressora">Impressora</label>
-        </div>
-        <textarea class="observacoes" placeholder="Observações"></textarea>
-    </form>
-</div>
-<div class="sala">
-    <h2>Sala Gesso</h2>
-    <form>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-mouse" name="mouse">
-            <label for="gerencia-medica-mouse">Mouse</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-teclado" name="teclado">
-            <label for="gerencia-medica-teclado">Teclado</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-monitor" name="monitor">
-            <label for="gerencia-medica-monitor">Monitor</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-impressora" name="impressora">
-            <label for="gerencia-medica-impressora">Impressora</label>
-        </div>
-        <textarea class="observacoes" placeholder="Observações"></textarea>
-    </form>
-</div>
-<div class="sala">
-    <h2>UPC</h2>
-    <form>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-mouse" name="mouse">
-            <label for="gerencia-medica-mouse">Mouse</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-teclado" name="teclado">
-            <label for="gerencia-medica-teclado">Teclado</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-monitor" name="monitor">
-            <label for="gerencia-medica-monitor">Monitor</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-impressora" name="impressora">
-            <label for="gerencia-medica-impressora">Impressora</label>
-        </div>
-        <textarea class="observacoes" placeholder="Observações"></textarea>
-    </form>
-</div>
-<div class="sala">
-    <h2>Farmacia</h2>
-    <form>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-mouse" name="mouse">
-            <label for="gerencia-medica-mouse">Mouse</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-teclado" name="teclado">
-            <label for="gerencia-medica-teclado">Teclado</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-monitor" name="monitor">
-            <label for="gerencia-medica-monitor">Monitor</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-impressora" name="impressora">
-            <label for="gerencia-medica-impressora">Impressora</label>
-        </div>
-        <textarea class="observacoes" placeholder="Observações"></textarea>
-    </form>
-</div>
-<div class="sala">
-    <h2>Sala Higienização</h2>
-    <form>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-mouse" name="mouse">
-            <label for="gerencia-medica-mouse">Mouse</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-teclado" name="teclado">
-            <label for="gerencia-medica-teclado">Teclado</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-monitor" name="monitor">
-            <label for="gerencia-medica-monitor">Monitor</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-impressora" name="impressora">
-            <label for="gerencia-medica-impressora">Impressora</label>
-        </div>
-        <textarea class="observacoes" placeholder="Observações"></textarea>
-    </form>
-</div>
-<div class="sala">
-    <h2>Raio X</h2>
-    <form>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-mouse" name="mouse">
-            <label for="gerencia-medica-mouse">Mouse</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-teclado" name="teclado">
-            <label for="gerencia-medica-teclado">Teclado</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-monitor" name="monitor">
-            <label for="gerencia-medica-monitor">Monitor</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-impressora" name="impressora">
-            <label for="gerencia-medica-impressora">Impressora</label>
-        </div>
-        <textarea class="observacoes" placeholder="Observações"></textarea>
-    </form>
-</div>
-<div class="sala">
-    <h2>Medicação antiga</h2>
-    <form>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-mouse" name="mouse">
-            <label for="gerencia-medica-mouse">Mouse</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-teclado" name="teclado">
-            <label for="gerencia-medica-teclado">Teclado</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-monitor" name="monitor">
-            <label for="gerencia-medica-monitor">Monitor</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-impressora" name="impressora">
-            <label for="gerencia-medica-impressora">Impressora</label>
-        </div>
-        <textarea class="observacoes" placeholder="Observações"></textarea>
-    </form>
-</div>
-<div class="sala">
-    <h2>Consultório 1 Black</h2>
-    <form>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-mouse" name="mouse">
-            <label for="gerencia-medica-mouse">Mouse</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-teclado" name="teclado">
-            <label for="gerencia-medica-teclado">Teclado</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-monitor" name="monitor">
-            <label for="gerencia-medica-monitor">Monitor</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-impressora" name="impressora">
-            <label for="gerencia-medica-impressora">Impressora</label>
-        </div>
-        <textarea class="observacoes" placeholder="Observações"></textarea>
-    </form>
-</div>
-<div class="sala">
-    <h2>Consultório 2 Black</h2>
-    <form>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-mouse" name="mouse">
-            <label for="gerencia-medica-mouse">Mouse</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-teclado" name="teclado">
-            <label for="gerencia-medica-teclado">Teclado</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-monitor" name="monitor">
-            <label for="gerencia-medica-monitor">Monitor</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-impressora" name="impressora">
-            <label for="gerencia-medica-impressora">Impressora</label>
-        </div>
-        <textarea class="observacoes" placeholder="Observações"></textarea>
-    </form>
-</div>
-<div class="sala">
-    <h2>Consultório 1</h2>
-    <form>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-mouse" name="mouse">
-            <label for="gerencia-medica-mouse">Mouse</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-teclado" name="teclado">
-            <label for="gerencia-medica-teclado">Teclado</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-monitor" name="monitor">
-            <label for="gerencia-medica-monitor">Monitor</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-impressora" name="impressora">
-            <label for="gerencia-medica-impressora">Impressora</label>
-        </div>
-        <textarea class="observacoes" placeholder="Observações"></textarea>
-    </form>
-</div>
-<div class="sala">
-    <h2>Consultório 2</h2>
-    <form>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-mouse" name="mouse">
-            <label for="gerencia-medica-mouse">Mouse</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-teclado" name="teclado">
-            <label for="gerencia-medica-teclado">Teclado</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-monitor" name="monitor">
-            <label for="gerencia-medica-monitor">Monitor</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-impressora" name="impressora">
-            <label for="gerencia-medica-impressora">Impressora</label>
-        </div>
-        <textarea class="observacoes" placeholder="Observações"></textarea>
-    </form>
-</div>
-<div class="sala">
-    <h2>Triagem 1</h2>
-    <form>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-mouse" name="mouse">
-            <label for="gerencia-medica-mouse">Mouse</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-teclado" name="teclado">
-            <label for="gerencia-medica-teclado">Teclado</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-monitor" name="monitor">
-            <label for="gerencia-medica-monitor">Monitor</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-impressora" name="impressora">
-            <label for="gerencia-medica-impressora">Impressora</label>
-        </div>
-        <textarea class="observacoes" placeholder="Observações"></textarea>
-    </form>
-</div>
-<div class="sala">
-    <h2>Triagem 2</h2>
-    <form>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-mouse" name="mouse">
-            <label for="gerencia-medica-mouse">Mouse</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-teclado" name="teclado">
-            <label for="gerencia-medica-teclado">Teclado</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-monitor" name="monitor">
-            <label for="gerencia-medica-monitor">Monitor</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-impressora" name="impressora">
-            <label for="gerencia-medica-impressora">Impressora</label>
-        </div>
-        <textarea class="observacoes" placeholder="Observações"></textarea>
-    </form>
-</div>
-<div class="sala">
-    <h2>Triagem 1 Black</h2>
-    <form>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-mouse" name="mouse">
-            <label for="gerencia-medica-mouse">Mouse</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-teclado" name="teclado">
-            <label for="gerencia-medica-teclado">Teclado</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-monitor" name="monitor">
-            <label for="gerencia-medica-monitor">Monitor</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-impressora" name="impressora">
-            <label for="gerencia-medica-impressora">Impressora</label>
-        </div>
-        <textarea class="observacoes" placeholder="Observações"></textarea>
-    </form>
-</div>
-<div class="sala">
-    <h2>Triagem 2 Black</h2>
-    <form>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-mouse" name="mouse">
-            <label for="gerencia-medica-mouse">Mouse</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-teclado" name="teclado">
-            <label for="gerencia-medica-teclado">Teclado</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-monitor" name="monitor">
-            <label for="gerencia-medica-monitor">Monitor</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-impressora" name="impressora">
-            <label for="gerencia-medica-impressora">Impressora</label>
-        </div>
-        <textarea class="observacoes" placeholder="Observações"></textarea>
-    </form>
-</div>
-<div class="sala">
-    <h2>Recepção Black</h2>
-    <form>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-mouse" name="mouse">
-            <label for="gerencia-medica-mouse">Mouse</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-teclado" name="teclado">
-            <label for="gerencia-medica-teclado">Teclado</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-monitor" name="monitor">
-            <label for="gerencia-medica-monitor">Monitor</label>
-        </div>
-        <div class="item">
-            <input type="checkbox" id="gerencia-medica-impressora" name="impressora">
-            <label for="gerencia-medica-impressora">Impressora</label>
-        </div>
-        <textarea class="observacoes" placeholder="Observações"></textarea>
-    </form>
-</div>
     </main>
     <footer>
         <p>Data e Hora: <span id="datetime"></span></p>
-        <p>Assinatura: Chayenne Pissango da Silva</p>
+        <p>Assinatura: Charles Messias Nobrega</p>
         <button id="print-btn">Tirar Print</button>
-        </footer>
-        <script>
+    </footer>
+    <script>
         // Atualiza a data e hora
         function atualizarDataHora() {
-        const dataHora = new Date();
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
-        document.getElementById("datetime").textContent = dataHora.toLocaleString('pt-BR', options);
+            const dataHora = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false };
+            document.getElementById("datetime").textContent = dataHora.toLocaleString('pt-BR', options);
         }
-            // Atualiza a data e hora quando a página é carregada
-    atualizarDataHora();
-    
-    // Atualiza a data e hora a cada segundo
-    setInterval(atualizarDataHora, 1000);
 
-    const salas = document.querySelectorAll('.sala');
+        atualizarDataHora();
+        setInterval(atualizarDataHora, 1000);
 
-    function verificarSala(sala) {
-        const checkboxes = sala.querySelectorAll('input[type="checkbox"]');
-        let todosMarcados = true;
-        checkboxes.forEach(checkbox => {
-            if (!checkbox.checked) {
-                todosMarcados = false;
-            }
+        const itens = ['Mouse', 'Teclado', 'Monitor', 'Impressora'];
+
+        function criarSala(nome) {
+            const sala = document.createElement('div');
+            sala.className = 'sala';
+
+            const titulo = document.createElement('h2');
+            titulo.textContent = nome;
+            sala.appendChild(titulo);
+
+            const form = document.createElement('form');
+
+            itens.forEach(item => {
+                const divItem = document.createElement('div');
+                divItem.className = 'item';
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = `${nome.toLowerCase().replace(/\s/g, '-')}-${item.toLowerCase()}`;
+                checkbox.name = item.toLowerCase();
+                divItem.appendChild(checkbox);
+
+                const label = document.createElement('label');
+                label.htmlFor = checkbox.id;
+                label.textContent = item;
+                divItem.appendChild(label);
+
+                form.appendChild(divItem);
+            });
+
+            const textarea = document.createElement('textarea');
+            textarea.className = 'observacoes';
+            textarea.placeholder = 'Observações';
+            form.appendChild(textarea);
+
+            const toggleButton = document.createElement('button');
+            toggleButton.type = 'button';
+            toggleButton.className = 'toggle-btn';
+            toggleButton.textContent = 'Mostrar/Esconder Observações';
+            toggleButton.addEventListener('click', () => {
+                textarea.style.display = textarea.style.display === 'none' ? 'block' : 'none';
+            });
+
+            sala.appendChild(form);
+            sala.appendChild(toggleButton);
+            document.getElementById('table').appendChild(sala);
+        }
+
+        ['Oftalmo', 'Exames 1', 'Exames 2', 'Exames 3', 'Exames 4', 'Exames 5', 'Exames 6', 'Consultório 1', 'Consultório 2', 'Consultório 3', 'Consultório 4', 'Consultório 5', 'ADM', 'Triagem', 'Emergência', 'Recepção', 'CTDM Consultório 1', 'CTDM Consultório 2', 'Oficina', 'Circuito', 'Recepção CTDM', 'Farmácia', 'Atendimento presencial 1', 'Credenciamento 1', 'Ti ativos de rede 1', 'Ti ativos de rede 2', 'Ti ativos de rede 3', 'Ti ativos de rede 4', 'Ambulatório', 'Consultório 1', 'Consultório 2', 'Consultório 3', 'Consultório 4', 'Consultório 5', 'Consultório 6', 'Consultório 6', 'Consultório 7', 'Consultório 8', 'Consultório 9', 'Consultório 10', 'Consultório 11', 'Consultório 12', 'Consultório 13', 'Consultório 14', 'Consultório 15', 'Recepção', 'ADM 1', 'ADM 2', 'ADM 3', 'Enfermagem', 'Pad', 'Oncologia', 'Consultório 1', 'Consultório 2', 'Consultório 3', 'Consultório 4', 'Consultório 5', 'Farmácia', 'Enfermagem', 'ADM', 'Salas admin 1', 'Salas admin 2', 'Salas admin 3', 'Salas admin 4', 'Auditório' ].forEach(nomeSala => criarSala(nomeSala));
+
+        const printButton = document.getElementById('print-btn');
+        printButton.addEventListener('click', () => {
+            window.print();
         });
-        return todosMarcados;
-    }
-
-    function atualizarCorSala(sala) {
-        if (verificarSala(sala)) {
-            sala.classList.add('sala-checked');
-            sala.querySelector('.observacoes').style.display = 'none';
-        } else {
-            sala.classList.remove('sala-checked');
-            sala.querySelector('.observacoes').style.display = 'block';
-        }
-    }
-
-    salas.forEach(sala => {
-        sala.addEventListener('change', () => {
-            atualizarCorSala(sala);
-        });
-    });
-
-    const printButton = document.getElementById('print-btn');
-    printButton.addEventListener('click', () => {
-        window.print();
-    });
-
-    // Ajuste para que a assinatura funcione com a tecla Enter
-    document.getElementById("assinatura").addEventListener("keydown", function(event) {
-        if (event.keyCode === 13) {
-            event.preventDefault();
-            document.getElementById("print-btn").click();
-        }
-    });
-</script>
+    </script>
 </body>
 </html>
-```
