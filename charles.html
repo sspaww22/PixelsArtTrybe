@@ -103,7 +103,7 @@
             margin-top: 20px;
         }
 
-        #print-btn {
+        #excel-btn {
             padding: 10px 20px;
             background-color: #333;
             color: white;
@@ -113,68 +113,11 @@
             transition: background-color 0.3s ease;
         }
 
-        #print-btn:hover {
+        #excel-btn:hover {
             background-color: #555;
         }
-
-        @media print {
-            @page {
-                size: landscape;
-                margin: 20mm;
-            }
-
-            body {
-                margin: 0;
-                padding: 0;
-            }
-
-            header, footer {
-                margin: 0;
-                padding: 10px;
-            }
-
-            header {
-                margin-bottom: 10mm;
-                text-align: center;
-                page-break-after: avoid;
-            }
-
-            footer {
-                margin-top: 10mm;
-                text-align: center;
-                page-break-before: avoid;
-            }
-
-            main {
-                margin-top: 20mm;
-                margin-bottom: 20mm;
-                page-break-before: auto;
-                page-break-after: auto;
-            }
-
-            #print-btn {
-                display: none;
-            }
-
-            .sala {
-                background-color: #e6ffe6 !important;
-                page-break-inside: avoid;
-                break-inside: avoid;
-            }
-
-            .sala:not(.sala-checked) {
-                background-color: #ffe6e6 !important;
-            }
-
-            .sala textarea {
-                display: block;
-            }
-
-            .toggle-btn {
-                display: none;
-            }
-        }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 </head>
 <body>
     <header>
@@ -187,8 +130,8 @@
     </main>
     <footer>
         <p>Data e Hora: <span id="datetime"></span></p>
-        <p>Assinatura: Charles Messias Nobrega</p>
-        <button id="print-btn">Tirar Print</button>
+        <p>Assinatura: <span id="assinatura">Charles Messias Nobrega</span></p>
+        <button id="excel-btn">Gerar Arquivo Excel</button>
     </footer>
     <script>
         // Atualiza a data e hora
@@ -249,11 +192,37 @@
             document.getElementById('table').appendChild(sala);
         }
 
-        ['Oftalmo Exames 1', 'Oftalmo Exames 2', 'Oftalmo Exames 3', 'Oftalmo Exames 4', 'Oftalmo Exames 5', 'Oftalmo Exames 6', 'Oftalmo Consultório 1', 'Oftalmo Consultório 2', 'Oftalmo Consultório 3', 'Oftalmo Consultório 4', 'COftalmo onsultório 5', 'Oftalmo ADM', 'Oftalmo Triagem', 'Oftalmo Emergência', 'Oftalmo Recepção', 'CTDM Consultório 1', 'CTDM Consultório 2', 'CTDM Oficina', 'CTDM Circuito', 'Recepção CTDM', 'CTDM Farmácia', 'Atendimento presencial guiche 1', 'Atendimento presencial guiche 2', 'Atendimento presencial guiche 3', 'Credenciamento 1', 'Ambulatório Consultório 1', 'Ambulatório Consultório 2', 'Ambulatório Consultório 3', 'Ambulatório Consultório 4', 'Ambulatório Consultório 5', 'Ambulatório Consultório 6', 'Ambulatório Consultório 6', 'Ambulatório Consultório 7', 'Ambulatório Consultório 8', 'Ambulatório Consultório 9', 'Ambulatório Consultório 10', 'Ambulatório Consultório 11', 'Ambulatório Consultório 12', 'Ambulatório Consultório 13', 'Ambulatório Consultório 14', 'Ambulatório Consultório 15', 'Ambulatório Recepção', 'Ambulatório ADM 1', 'Ambulatório ADM 2', 'Ambulatório ADM 3', 'Ambulatório Enfermagem', 'Ambulatório Pad', 'Oncologia Consultório 1', 'Oncologia Consultório 2', 'Oncologia Consultório 3', 'Oncologia Consultório 4', 'Oncologia Consultório 5', 'Oncologia Farmácia', 'Oncologia Enfermagem', 'Salas admin 1', 'Salas admin 2', 'Salas admin 3', 'Salas admin 4', 'ADM Auditório' ].forEach(nomeSala => criarSala(nomeSala));
+        ['Oftalmo Exames 1', 'Oftalmo Exames 2', 'Oftalmo Exames 3', 'Oftalmo Exames 4', 'Oftalmo Exames 5', 'Oftalmo Exames 6', 'Oftalmo Consultório 1', 'Oftalmo Consultório 2', 'Oftalmo Consultório 3', 'Oftalmo Consultório 4', 'Oftalmo Consultório 5', 'Oftalmo ADM', 'Oftalmo Triagem', 'Oftalmo Emergência', 'Oftalmo Recepção', 'CTDM Consultório 1', 'CTDM Consultório 2', 'CTDM Oficina', 'CTDM Circuito', 'Recepção CTDM', 'CTDM Farmácia', 'Atendimento presencial guiche 1', 'Atendimento presencial guiche 2', 'Atendimento presencial guiche 3', 'Credenciamento 1', 'Ambulatório Consultório 1', 'Ambulatório Consultório 2', 'Ambulatório Consultório 3', 'Ambulatório Consultório 4', 'Ambulatório Consultório 5', 'Ambulatório Consultório 6', 'Ambulatório Consultório 7', 'Ambulatório Consultório 8', 'Ambulatório Consultório 9', 'Ambulatório Consultório 10', 'Ambulatório Consultório 11', 'Ambulatório Consultório 12', 'Ambulatório Consultório 13', 'Ambulatório Consultório 14', 'Ambulatório Consultório 15', 'Ambulatório Recepção', 'Ambulatório ADM 1', 'Ambulatório ADM 2', 'Ambulatório ADM 3', 'Ambulatório Enfermagem', 'Ambulatório Pad', 'Oncologia Consultório 1', 'Oncologia Consultório 2', 'Oncologia Consultório 3', 'Oncologia Consultório 4', 'Oncologia Consultório 5', 'Oncologia Farmácia', 'Oncologia Enfermagem', 'Salas admin 1', 'Salas admin 2', 'Salas admin 3', 'Salas admin 4', 'ADM Auditório' ].forEach(nomeSala => criarSala(nomeSala));
 
-        const printButton = document.getElementById('print-btn');
-        printButton.addEventListener('click', () => {
-            window.print();
+        const excelButton = document.getElementById('excel-btn');
+        excelButton.addEventListener('click', () => {
+            const table = document.getElementById('table');
+            const data = [];
+            const headers = ['Sala', 'Item', 'Status', 'Observações'];
+            data.push(headers);
+
+            const salas = table.getElementsByClassName('sala');
+            for (let sala of salas) {
+                const salaNome = sala.querySelector('h2').textContent;
+                const form = sala.querySelector('form');
+                const itens = form.getElementsByClassName('item');
+                const observacoes = form.querySelector('textarea').value;
+                
+                for (let item of itens) {
+                    const itemLabel = item.querySelector('label').textContent;
+                    const itemCheckbox = item.querySelector('input').checked ? 'Sim' : 'Não';
+                    data.push([salaNome, itemLabel, itemCheckbox, observacoes]);
+                }
+            }
+
+            const assinatura = document.getElementById('assinatura').textContent;
+            const datetime = document.getElementById('datetime').textContent;
+            const filename = `Checklist diario ${assinatura} ${datetime}.xlsx`.replace(/[:]/g, '-');
+
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            XLSX.utils.book_append_sheet(wb, ws, 'Checklist Hospitalar');
+            XLSX.writeFile(wb, filename);
         });
     </script>
 </body>
